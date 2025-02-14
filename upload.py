@@ -1,5 +1,6 @@
-from flask import Blueprint, request, jsonify    
+from flask import Blueprint, request, jsonify, send_file    
 import os
+from kmeans import apply_kmeans
 
 upload_bp = Blueprint("upload", __name__)
 
@@ -19,5 +20,7 @@ def upload_image():
     file_path = os.path.join(UPLOAD_FOLFER, file.filename)
     file.save(file_path)
     
-    return jsonify({"message": "Image uploaded successfully", "file_path": file_path}), 201
+    compressed_image_path = apply_kmeans(file_path)
+    
+    return send_file(compressed_image_path, mimetype="image/png")
     
