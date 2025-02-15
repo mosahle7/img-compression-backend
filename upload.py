@@ -3,6 +3,7 @@ from PIL import Image
 import os
 import io
 import numpy as np
+import base64
 from kmeans import apply_kmeans
 
 upload_bp = Blueprint("upload", __name__)
@@ -24,5 +25,12 @@ def upload_image():
     processed_image.save(img_io, "PNG")
     img_io.seek(0)
     
-    return send_file(img_io, mimetype="image/png")
+    compressed_size = len(img_io.getvalue())/1024;
+    
+    return jsonify({
+        "image_url": "data:image/png;base64," + base64.b64encode(img_io.getvalue()).decode("utf-8"),
+        "size": round(compressed_size, 2),
+        "name": file.filename + "_compressed.png"
+    })
+    
     
