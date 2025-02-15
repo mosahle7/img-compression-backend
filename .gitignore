@@ -1,0 +1,27 @@
+# Virtual environment
+venv/
+env/
+*.pyc
+*.pyo
+__pycache__/
+
+# Config & secrets
+*.env
+config.py
+
+# Logs & cache
+*.log
+instance/
+*.sqlite3
+*.db
+
+# Python dependency files
+pip-log.txt
+
+# VSCode & JetBrains IDE settings
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db

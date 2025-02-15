@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify, send_file    
+from PIL import Image
 import os
+import io
+import numpy as np
 from kmeans import apply_kmeans
 
 upload_bp = Blueprint("upload", __name__)
-
-UPLOAD_FOLFER = "uploads"
-os.makedirs(UPLOAD_FOLFER, exist_ok=True)
 
 @upload_bp.route("/", methods=["POST"])
 def upload_image():
@@ -17,10 +17,12 @@ def upload_image():
     if file.filename == "":
         return jsonify({"error": "No selected file"}), 400
     
-    file_path = os.path.join(UPLOAD_FOLFER, file.filename)
-    file.save(file_path)
+    image = Image.open(io.BytesIO(file.read()))
+    processed_image  = apply_kmeans(image)
     
-    compressed_image_path = apply_kmeans(file_path)
+    img_io = io.BytesIO()
+    processed_image.save(img_io, "PNG")
+    img_io.seek(0)
     
-    return send_file(compressed_image_path, mimetype="image/png")
+    return send_file(img_io, mimetype="image/png")
     

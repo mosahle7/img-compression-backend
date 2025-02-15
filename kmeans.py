@@ -1,18 +1,14 @@
 import numpy as np
-import cv2
 from sklearn.cluster import KMeans
 from PIL import Image
-import os
 
-PROCESSED_FOLDER = "processed"
-os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
-def apply_kmeans(img_path, K=64):
+def apply_kmeans(image, K=64):
     """ Apply K-Means clustering to compress the image """
-    og_img = Image.open(img_path).convert("RGB")  # Ensure RGB format
-    og_img = np.array(og_img)
+    image = image.convert("RGB")
+    img_array = np.array(image)
 
-    X_img = np.reshape(og_img, (og_img.shape[0] * og_img.shape[1], 3)).astype(np.float32)
+    X_img = np.reshape(img_array, (img_array.shape[0] * img_array.shape[1], 3)).astype(np.float32)
 
     # Scale only if required (JPEG needs scaling, PNG doesn't)
     if X_img.max() > 1:
@@ -25,9 +21,6 @@ def apply_kmeans(img_path, K=64):
 
     centroids = (centroids * 255).astype(np.uint8)
     X_recovered = centroids[labels]
-    X_recovered = np.reshape(X_recovered, og_img.shape)
+    X_recovered = np.reshape(X_recovered, img_array.shape)
 
-    compressed_path = os.path.join(PROCESSED_FOLDER, os.path.basename(img_path))
-    cv2.imwrite(compressed_path, cv2.cvtColor(X_recovered, cv2.COLOR_RGB2BGR))
-
-    return compressed_path
+    return Image.fromarray(X_recovered)
