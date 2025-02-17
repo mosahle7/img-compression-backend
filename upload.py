@@ -1,4 +1,5 @@
-from flask import Blueprint, request, jsonify, send_file    
+from flask import Blueprint, request, jsonify, send_file   
+from flask_cors import cross_origin 
 from PIL import Image
 import os
 import io
@@ -9,6 +10,7 @@ from kmeans import apply_kmeans
 upload_bp = Blueprint("upload", __name__)
 
 @upload_bp.route("/", methods=["POST"])
+@cross_origin()  # Allow all origins
 def upload_image():
     if "file" not in request.files:
         return jsonify({"error": "No file part"}), 400
