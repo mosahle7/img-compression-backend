@@ -6,7 +6,7 @@ import os
 
 WSGIRequestHandler.protocol_version = "HTTP/1.1"  # Keep connection open
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers=["Content-Type", "Authorization"], supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers=["Content-Type", "Authorization"])
 
 app.register_blueprint(upload_bp, url_prefix="/upload") 
 
@@ -15,4 +15,4 @@ def home():
     return jsonify({"message": "Flask server is running"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True, port=5000, threaded= True)
+    app.run(host="0.0.0.0", debug=True, port=5000)
