@@ -6,7 +6,7 @@ import os
 
 WSGIRequestHandler.protocol_version = "HTTP/1.1"  # Keep connection open
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}}, allow_headers=["Content-Type", "Authorization"])
+CORS(app, resources={r"/*": {"origins": "https://glorious-dollop-7jjq5pp7q6g3wq5g-5173.app.github.dev"}})
 
 app.register_blueprint(upload_bp, url_prefix="/upload") 
 
